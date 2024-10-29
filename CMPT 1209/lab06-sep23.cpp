@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 using namespace std;
+
 class Rational
 {
 private:
@@ -193,6 +194,33 @@ Rational operator/=(Rational& a, const Rational& b) {
 	return a;
 }
 
+// ------------- OPERATOR OVERLOADING ++ -- -------------
+// postfix
+// y = a++; -> y = a; -> a++
+// prefix
+// y = ++a; -> ++a; -> y = a
+
+// void operator++(Rational& a) {
+//	a.setNumer(a.getNumer() + a.getDenom());
+// }
+// this will make ++a; in main() work while a++ won't be overloaded by this ()
+
+Rational operator++(Rational& a) {
+	// for prefix implementation: b = ++a;
+	a.setNumer(a.getNumer() + a.getDenom());
+	return a;
+}
+
+Rational operator++(Rational& a, int) {
+	// for postfix implementation: b = a++;
+	// Rational a, Rational b(1/4)
+	// bug without _temp in main() a = b++; a.output() b.output()
+	// a -> 5/4 and b -> 5/4 while correct is a -> 1/4 as postfix rule that a = b -> a.output -> a + b
+	Rational _temp = a;
+	a.setNumer(a.getNumer() + a.getDenom());
+	return a;
+}
+
 
 int main()
 {
@@ -253,18 +281,14 @@ int main()
 	cout << "\n----Operator Overload += -= *= != ----\n";
 	cout << "\nOperator +=: ";
 	r = b += c;
-	// b += c;
 	r.output();
 	cout << "\nOperator -=: ";
-	// b -= c;
 	r = b -= c;
 	r.output();
 	cout << "\nOperator *=: ";
-	// b *= c;
 	r = b *= c;
 	r.output();
 	cout << "\nOperator /=: ";
-	// b /= c;
 	r = b /= c;
 	r.output();
 
